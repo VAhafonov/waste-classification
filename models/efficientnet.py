@@ -1,5 +1,5 @@
 """
-ResNet34 Model for Waste Classification
+EfficientNet Models for Waste Classification
 """
 
 import torch
@@ -7,20 +7,20 @@ import torch.nn as nn
 import torchvision.models as models
 
 
-class ResNet34(nn.Module):
-    """ResNet34-based model for waste classification"""
+class EfficientNetB0(nn.Module):
+    """EfficientNetB0-based model for waste classification"""
     
     def __init__(self, num_classes=9, pretrained=True):
-        super(ResNet34, self).__init__()
+        super(EfficientNetB0, self).__init__()
         
-        # Load ResNet34
-        self.backbone = models.resnet34(pretrained=pretrained)
+        # Load EfficientNetB0
+        self.backbone = models.efficientnet_b0(pretrained=pretrained)
         # Replace classifier head for our number of classes
-        num_features = self.backbone.fc.in_features
+        num_features = self.backbone.classifier[1].in_features
         self.head = nn.Linear(num_features, num_classes)
 
-        # we don't need the classifier head
-        self.backbone.fc = nn.Identity()
+        # Remove the original classifier
+        self.backbone.classifier = nn.Identity()
 
         # Initialize classifier for training from scratch
         nn.init.xavier_uniform_(self.head.weight)
