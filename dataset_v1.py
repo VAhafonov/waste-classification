@@ -6,6 +6,7 @@ import os
 import torch
 from torch.utils.data import Dataset
 from torchvision import transforms
+from torchvision.transforms import v2
 from PIL import Image
 
 from utils.class_mapping import class_name_to_idx, idx_to_class_name
@@ -86,7 +87,7 @@ def get_transforms(is_training=True):
             # transforms.RandomRotation(10),
             # transforms.Resize((image_size, image_size)),
             transforms.ToTensor(),
-            transforms.GaussianNoise(mean=0.0, std=1. / 255., clip=True),
+            v2.GaussianNoise(mean=0.0, sigma=1. / 255., clip=True),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         ]
     else:
@@ -94,7 +95,7 @@ def get_transforms(is_training=True):
             transforms.Resize(256),
             transforms.CenterCrop(224),
             transforms.ToTensor(),
-            transforms.GaussianNoise(mean=0.0, std=1. / 255., clip=True),
+            v2.GaussianNoise(mean=0.0, sigma=1. / 255., clip=True),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         ]
     
