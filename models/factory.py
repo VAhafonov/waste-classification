@@ -16,7 +16,7 @@ def create_model(model_config):
             - pretrained (bool): Whether to use pretrained weights
             - freeze_backbone (bool): Whether to freeze backbone parameters
     """
-    model_type = model_config.get('model_type', 'resnet34').lower()
+    model_type = model_config['name']
     
     if model_type == 'resnet34':
         model = ResNet34(
