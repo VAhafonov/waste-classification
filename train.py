@@ -64,7 +64,7 @@ class ModelTrainer:
         self.train_accuracy.reset()
         self.train_f1.reset()
         
-        for batch_idx, (data, target) in enumerate(tqdm(dataloader, desc="Training")):
+        for batch_idx, (data, target) in enumerate(tqdm(dataloader, desc="Training", leave=False)):
             data, target = data.to(self.device), target.to(self.device)
            
             
@@ -95,7 +95,7 @@ class ModelTrainer:
         self.val_accuracy.reset()
         self.val_f1.reset()
         with torch.no_grad():
-            for data, target in tqdm(dataloader, desc="Validation"):
+            for data, target in tqdm(dataloader, desc="Validation", leave=False):
                 data, target = data.to(self.device), target.to(self.device)
                 output = self.model(data)
                 loss = criterion(output, target)
