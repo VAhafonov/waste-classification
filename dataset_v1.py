@@ -123,7 +123,8 @@ def create_data_loaders(dataset_config, worker_init_fn=None):
         batch_size=dataset_config['batch_size'],
         shuffle=True,
         num_workers=dataset_config['num_workers'],
-        worker_init_fn=worker_init_fn
+        worker_init_fn=worker_init_fn,
+        persistent_workers=True
     )
     
     val_loader = torch.utils.data.DataLoader(
@@ -131,7 +132,8 @@ def create_data_loaders(dataset_config, worker_init_fn=None):
         batch_size=dataset_config['batch_size'],
         shuffle=False,
         num_workers=dataset_config['num_workers'],
-        worker_init_fn=worker_init_fn
+        worker_init_fn=worker_init_fn,
+        persistent_workers=True
     )
     
     return train_loader, val_loader
