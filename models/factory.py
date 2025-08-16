@@ -4,6 +4,7 @@ Model factory for creating different waste classification models
 
 from .resnet34 import ResNet34
 from .efficientnet import EfficientNetB0
+from .mobilenet import MobileNetV3Large
 
 
 def create_model(model_config):
@@ -11,7 +12,7 @@ def create_model(model_config):
     
     Args:
         model_config (dict): Configuration dictionary containing:
-            - model_type (str): 'resnet34' or 'efficientnet_b0'
+            - name (str): 'resnet34', 'efficientnet_b0', or 'mobilenet_v3_large'
             - num_classes (int): Number of output classes
             - pretrained (bool): Whether to use pretrained weights
             - freeze_backbone (bool): Whether to freeze backbone parameters
@@ -28,8 +29,13 @@ def create_model(model_config):
             num_classes=model_config['num_classes'],
             pretrained=model_config['pretrained']
         )
+    elif model_type == 'mobilenet_v3_large':
+        model = MobileNetV3Large(
+            num_classes=model_config['num_classes'],
+            pretrained=model_config['pretrained']
+        )
     else:
-        raise ValueError(f"Unsupported model type: {model_type}. Supported types: 'resnet34', 'efficientnet_b0'")
+        raise ValueError(f"Unsupported model type: {model_type}. Supported types: 'resnet34', 'efficientnet_b0', 'mobilenet_v3_large'")
     
     if model_config.get('freeze_backbone', False):
         model.freeze_backbone()
