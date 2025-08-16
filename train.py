@@ -387,6 +387,21 @@ def main():
     print("Creating model...")
     model = create_model(config['model'])
     
+    # Check for checkpoint resuming (weights only)
+    checkpoint_config = config.get('checkpoint', {})
+    if checkpoint_config.get('resume', False):
+        checkpoint_path = checkpoint_config.get('path', '')
+        if checkpoint_path and os.path.exists(checkpoint_path):
+            print(f"Loading model weights from checkpoint: {checkpoint_path}")
+            loaded_model, epoch, loss = load_model(config, checkpoint_path, device)
+            if loaded_model is not None:
+                model = loaded_model
+                print("Model weights loaded successfully!")
+            else:
+                print("Failed to load checkpoint. Starting from scratch.")
+        else:
+            print(f"Warning: Checkpoint file not found at {checkpoint_path}. Starting from scratch.")
+    
     # Print model info
     total_params = sum(p.numel() for p in model.parameters())
     trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)

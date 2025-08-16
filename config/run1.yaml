@@ -35,6 +35,12 @@ scheduler:
   step_size: 10
   gamma: 0.1
 
+# Checkpoint Configuration
+checkpoint:
+  resume: false  # Set to true to resume from checkpoint
+  path: ""  # Path to checkpoint file (e.g., "./saved_models/run1/checkpoint_epoch_20.pth")
+  resume_training_state: true  # Whether to resume optimizer and scheduler state
+
 # Logging and Checkpoints
 logging:
   log_dir: "./logs"
