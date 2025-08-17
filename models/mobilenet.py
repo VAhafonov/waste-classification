@@ -15,8 +15,11 @@ class MobileNetV3Large(nn.Module):
         
         # Load MobileNetV3Large
         self.backbone = models.mobilenet_v3_large(pretrained=pretrained)
-        # Replace classifier head for our number of classes
-        num_features = self.backbone.classifier[3].in_features
+        
+        # Get the number of features from the classifier input
+        # MobileNetV3Large classifier has: [Linear(960, 1280), Hardswish(), Dropout(), Linear(1280, num_classes)]
+        # We want the input features to the first linear layer
+        num_features = self.backbone.classifier[0].in_features  # Should be 960
         self.head = nn.Linear(num_features, num_classes)
 
         # Remove the original classifier
