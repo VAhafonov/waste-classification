@@ -19,6 +19,8 @@ from torchmetrics import Accuracy
 from torchmetrics.classification import MulticlassF1Score
 from models import create_model
 from dataset_v1 import create_data_loaders
+from utils.FocalLoss import FocalLoss
+# from dataset_v2 import create_data_loaders
 
 
 def worker_init_fn(worker_id):
@@ -162,7 +164,7 @@ def load_config(config_path):
 def create_optimizer(model, config):
     """Create optimizer based on configuration"""
     optimizer_name = config['training']['optimizer'].lower()
-    lr = config['training']['learning_rate']
+    lr = float(config['training']['learning_rate'])
     weight_decay = float(config['training']['weight_decay'])
     
     if optimizer_name == 'adam':
@@ -247,7 +249,16 @@ def train_model(config, model, train_loader, val_loader, device, config_filename
     """Main training function"""
     
     # Setup training components
-    criterion = nn.CrossEntropyLoss()
+    loss = config['training'].get('loss_type', 'cross_entropy')
+    if loss == 'cross_entropy':
+        weight = config['training'].get('cross_entropy_weight')
+        if weight is not None:
+            weight = torch.from_numpy(np.array(weight).astype(np.float32)).to(device=device)
+        criterion = nn.CrossEntropyLoss(weight=weight)
+    elif loss == 'focal':
+        criterion = FocalLoss(alpha=[1.039, 1.165, 1.140, 0.606, 0.967, 0.958, 0.520, 1.506, 1.098], gamma=1.5)
+    else:
+        raise Exception
     optimizer = create_optimizer(model, config)
     scheduler = create_scheduler(optimizer, config)
     trainer = ModelTrainer(model, config['model']['num_classes'], device)
