@@ -105,13 +105,13 @@ def create_data_loaders(dataset_config, worker_init_fn=None):
     """Create training and validation data loaders"""
     
     # Create datasets
-    train_dataset = WasteDataset_v1(
+    train_dataset = WasteDataset_v2(
         data_dir=dataset_config['data_dir'],
         split_version=dataset_config['split_version'],
         split='train'
     )
     
-    val_dataset = WasteDataset_v1(
+    val_dataset = WasteDataset_v2(
         data_dir=dataset_config['data_dir'],  
         split_version=dataset_config['split_version'],
         split='val'
