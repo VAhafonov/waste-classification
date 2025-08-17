@@ -1,0 +1,51 @@
+# Training Configuration for Waste Classification
+
+# trained on dataset_v1
+# Model Configuration
+model:
+  name: "efficientnet_b0"
+  num_classes: 9
+  freeze_backbone: false
+  pretrained: true  # Set to false to train from scratch
+
+# Dataset Configuration
+dataset:
+  data_dir: "e:/data/waste/RealWaste"
+  split_version: "v1"
+  image_size: 224
+  batch_size: 32
+  num_workers: 4
+  # Data Augmentation
+  augmentation:
+    horizontal_flip: true
+    rotation: 15
+    color_jitter: true
+  
+# Training Configuration
+training:
+  epochs: 50
+  learning_rate: 5e-5
+  weight_decay: 1e-4
+  momentum: 0.9
+  optimizer: "adam"  # or "sgd"
+  seed: 42  # For reproducibility
+  
+# Learning Rate Scheduler
+scheduler:
+  type: "cosine"  # "step", "cosine", or "none"
+#  step_size: 10
+#  gamma: 0.1
+
+# Checkpoint Configuration
+checkpoint:
+  resume: true  # Set to true to resume from checkpoint
+  path: "./saved_models/run1_ef/best_model.pth"  # Path to checkpoint file (e.g., "./saved_models/run1/checkpoint_epoch_20.pth")
+  resume_training_state: false  # Whether to resume optimizer and scheduler state
+
+# Logging and Checkpoints
+logging:
+  log_dir: "./logs"
+  save_dir: "./saved_models"
+  log_interval: 10  # Log every N batches
+  save_interval: 5  # Save checkpoint every N epochs
+  tensorboard: true
