@@ -1,0 +1,37 @@
+# Dockerfile for Waste Classification Gradio Demo
+FROM python:3.9-slim
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements first for better caching
+COPY requirements.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+COPY . .
+
+# Create directories for models and assets
+RUN mkdir -p saved_models config assets
+
+# Set environment variables
+ENV PYTHONPATH=/app
+ENV GRADIO_SERVER_NAME=0.0.0.0
+ENV GRADIO_SERVER_PORT=7860
+
+# Expose port
+EXPOSE 7860
+
+# Default command (can be overridden)
+CMD ["python", "gradio_demo.py", \
+     "--config", "config/run1_ef_unfreeze.yaml", \
+     "--checkpoint", "saved_models/run1_ef_unfreeze/best_model.pth", \
+     "--port", "7860"]
