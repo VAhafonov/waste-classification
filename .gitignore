@@ -130,12 +130,6 @@ dmypy.json
 
 # Machine Learning specific
 # Model files and checkpoints
-saved_models/
-*.pth
-*.pkl
-*.joblib
-*.h5
-*.hdf5
 checkpoints/
 models/checkpoints/
 
