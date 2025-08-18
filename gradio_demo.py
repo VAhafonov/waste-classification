@@ -109,7 +109,12 @@ def create_demo(config_path, checkpoint_path, device='auto', logo_path=None, ena
         return predictions
     
     # Create interface using Blocks for better HTML control
-    with gr.Blocks(theme=gr.themes.Soft(), title="🗂️ Waste Classification Demo") as demo:
+    # Force English interface regardless of browser locale
+    with gr.Blocks(
+        theme=gr.themes.Soft(), 
+        title="🗂️ Waste Classification Demo",
+        analytics_enabled=False  # Also disable analytics for privacy
+    ) as demo:
         
         # Add logo if provided
         if logo_path and os.path.exists(logo_path):
@@ -199,6 +204,10 @@ def create_demo(config_path, checkpoint_path, device='auto', logo_path=None, ena
 def main():
     """Main function to run the demo"""
     import argparse
+    
+    # Force English locale for Gradio interface
+    os.environ['LANG'] = 'en_US.UTF-8'
+    os.environ['LC_ALL'] = 'en_US.UTF-8'
     
     # Hardcoded authentication credentials - CHANGE THESE!
     AUTH_USERNAME = "cloee"
